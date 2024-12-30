@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="stopwatch">
+        <h1 id="displayTime">00:00:00</h1>
+        <div class="buttons">
+            <img id="stopButton" src="https://cdn-icons-png.flaticon.com/128/4340/4340168.png" alt="Stop Image" onclick="stopTimer()">
+            <img id="playButton" src="https://cdn-icons-png.flaticon.com/128/260/260446.png" alt="Play Image" onclick="startTimer()">
+            <img src="https://cdn-icons-png.flaticon.com/128/6066/6066733.png" alt="Reset Image" onclick="resetTimer()">
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let elapsedTime = 0;
+
+        function startTimer() {
+            if (timerInterval) {
+                return; // Timer is already running
+            }
+            const startTime = Date.now() - elapsedTime;
+            timerInterval = setInterval(() => {
+                elapsedTime = Date.now() - startTime;
+                displayTime(elapsedTime);
+            }, 1000);
+
+            // Change play button to pause button
+            document.getElementById("playButton").src = "https://cdn-icons-png.flaticon.com/128/4181/4181163.png";
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+
+            // Change pause button back to play button
+            document.getElementById("playButton").src = "https://cdn-icons-png.flaticon.com/128/260/260446.png";
+        }
+
+        function resetTimer() {
+            stopTimer();
+            elapsedTime = 0;
+            displayTime(elapsedTime);
+        }
+
+        function displayTime(time) {
+            const hours = Math.floor(time / (1000 * 60 * 60));
+            const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((time % (1000 * 60)) / 1000);
+            document.getElementById('displayTime').innerText = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
